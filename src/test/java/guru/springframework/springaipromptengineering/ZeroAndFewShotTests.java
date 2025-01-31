@@ -33,6 +33,12 @@ public class ZeroAndFewShotTests extends BaseTestClass {
             Review: ```{review}```
             """;
 
+    String promptWithJustEmotions = """
+            Identify a list of emotions that the writer of the following reviews is expressing.
+            
+            Review: ```{review}```
+            """;
+
     /**
      * Zero shot - send the model a single prompt with no hints or examples. Leverages the model's training to generate a response.
      */
@@ -52,18 +58,32 @@ public class ZeroAndFewShotTests extends BaseTestClass {
     }
 
     @Test
-    void zeroShotPromptTestWithModelOptions() {
+    void zeroShotPromptTestWithJustEmotions() {
+        // java for loop 3 times
+        for (int i = 0; i < 3; i++) {
+            // java UUID randomUUID is an API cache buster
+            PromptTemplate promptTemplate = new PromptTemplate(promptWithJustEmotions,
+                    Map.of("review", UUID.randomUUID() + "\n" + review));
 
+            ChatResponse response = chatModel.call(promptTemplate.create());
+
+            System.out.println("#################################\n");
+            System.out.println(response.getResult().getOutput().getContent());
+        }
+    }
+
+    @Test
+    void zeroShotPromptTestWithModelOptions() {
         OpenAiChatOptions openAiChatOptions = new OpenAiChatOptions.Builder(openAiChatProperties.getOptions())
-                .withTemperature(0.1) //default is 0.7
-                .withModel("gpt-4-turbo-preview")
+                .temperature(1.0) //default is 0.7
+                .model("gpt-4-turbo-preview")
                 .build();
 
         // java for loop 3 times
         for (int i = 0; i < 3; i++) {
             // java UUID randomUUID is an API cache buster
             PromptTemplate promptTemplate = new PromptTemplate(prompt,
-                    Map.of("review" , UUID.randomUUID() + "\n" + review));
+                    Map.of("review", UUID.randomUUID() + "\n" + review));
 
             Prompt prompt = new Prompt(promptTemplate.createMessage(), openAiChatOptions);
 
@@ -76,18 +96,18 @@ public class ZeroAndFewShotTests extends BaseTestClass {
 
     /**
      * Few shot - send the model a few examples to help it understand the context of the prompt.
-     *
-     * Example from 'Language Models are Few-Shot Learners' paper: https://arxiv.org/abs/2005.14165
+     * <p>
+     * Example from 'Language Models are Few-Shot Learners' paper: <a href="https://arxiv.org/abs/2005.14165">https://arxiv.org/abs/2005.14165</a>
      */
     String whatpuPrompt = """
-            A "whatpu" is a small, furry animal native to Tanzania. An example of a sentence that uses
-            the word whatpu is:
-           \s
-            We were traveling in Africa and we saw these very cute whatpus.
-            \s
-            To do a "farduddle" means to jump up and down really fast. An example of a sentence that uses
-                  the word farduddle is:
-      \s""";
+                  A "whatpu" is a small, furry animal native to Tanzania. An example of a sentence that uses
+                  the word whatpu is:
+                 \s
+                  We were traveling in Africa and we saw these very cute whatpus.
+                  \s
+                  To do a "farduddle" means to jump up and down really fast. An example of a sentence that uses
+                        the word farduddle is:
+            \s""";
 
     @Test
     void testwhatPuPromptFewShotTest() {

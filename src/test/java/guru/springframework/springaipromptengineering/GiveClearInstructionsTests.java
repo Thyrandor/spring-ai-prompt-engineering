@@ -47,13 +47,13 @@ public class GiveClearInstructionsTests extends BaseTestClass {
             You will be provided with text delimited by triple quotes.
             If it contains a sequence of instructions,
             re-write those instructions in the following format:
-                        
+            
             Step 1 - ...
             Step 2 - ...
             Step N - ...
-                        
+            
             If the text does not contain a sequence of instructions, then simply write \\"No steps provided.\\"
-                        
+            
             \\"\\"\\"{text_1}\\"\\"\\"
             """;
 
@@ -70,9 +70,9 @@ public class GiveClearInstructionsTests extends BaseTestClass {
     String bookDescription = """
             Book Elon Musk
             When Elon Musk was a kid in South Africa, he was regularly beaten by bullies. One day a group pushed him down some concrete steps and kicked him until his face was a swollen ball of flesh. He was in the hospital for a week. But the physical scars were minor compared to the emotional ones inflicted by his father, an engineer, rogue, and charismatic fantasist.
-                        
+            
             His father’s impact on his psyche would linger. He developed into a tough yet vulnerable man-child, prone to abrupt Jekyll-and-Hyde mood swings, with an exceedingly high tolerance for risk, a craving for drama, an epic sense of mission, and a maniacal intensity that was callous and at times destructive.
-                        
+            
             At the beginning of 2022—after a year marked by SpaceX launching thirty-one rockets into orbit, Tesla selling a million cars, and him becoming the richest man on earth—Musk spoke ruefully about his compulsion to stir up dramas. “I need to shift my mindset away from being in crisis mode, which it has been for about fourteen years now, or arguably most of my life,” he said.""";
 
     @Test
@@ -100,6 +100,38 @@ public class GiveClearInstructionsTests extends BaseTestClass {
     @Test
     void testCookSteakAsHarryPotter() {
         PromptTemplate promptTemplate = new PromptTemplate(directionsPrompt + "Give the directions using the tone, tools and imagination of JK Rowling in a Harry Potter book",
+                Map.of("text_1", cookASteak));
+
+        System.out.println(chatModel.call(promptTemplate.create()).getResult().getOutput().getContent());
+    }
+
+    @Test
+    void testCookSteakAsAngelaMerkel() {
+        PromptTemplate promptTemplate = new PromptTemplate(directionsPrompt + "Give the directions in German using the tone, tools and imagination of Angela Merkel",
+                Map.of("text_1", cookASteak));
+
+        System.out.println(chatModel.call(promptTemplate.create()).getResult().getOutput().getContent());
+    }
+
+    @Test
+    void testCookSteakAsMasterYoda() {
+        PromptTemplate promptTemplate = new PromptTemplate(directionsPrompt + "Give the directions in German using the tone, tools and imagination of Master Yoda",
+                Map.of("text_1", cookASteak));
+
+        System.out.println(chatModel.call(promptTemplate.create()).getResult().getOutput().getContent());
+    }
+
+    @Test
+    void testCookSteakAsBlackMetalChef() {
+        PromptTemplate promptTemplate = new PromptTemplate(directionsPrompt + "Give the directions using the tone, tools and imagination of a Black Metal chef",
+                Map.of("text_1", cookASteak));
+
+        System.out.println(chatModel.call(promptTemplate.create()).getResult().getOutput().getContent());
+    }
+
+    @Test
+    void testCookSteakAsItalianPowerMetalChef() {
+        PromptTemplate promptTemplate = new PromptTemplate(directionsPrompt + "Give the directions using the tone, tools and imagination of a Italian Power Metal chef",
                 Map.of("text_1", cookASteak));
 
         System.out.println(chatModel.call(promptTemplate.create()).getResult().getOutput().getContent());
